@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>404 — Página no encontrada | WolfMCForge</title>
+  <meta name="description" content="La página que buscas no existe o fue movida.">
+  <meta name="robots" content="noindex">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+<body>
+  <a class="skip-link" href="#not-found">Saltar al contenido</a>
+
+  <!-- Header / Menú centrado -->
+  <header class="site-header" role="banner">
+    <div class="header-inner">
+      <div class="brand">
+        <a href="index.html#inicio" class="brand-link" aria-label="Ir al inicio">WolfMCForge</a>
+      </div>
+
+      <button class="nav-toggle" aria-label="Abrir menú" aria-expanded="false" aria-controls="site-nav">
+        <span class="nav-toggle-bar"></span>
+        <span class="nav-toggle-bar"></span>
+        <span class="nav-toggle-bar"></span>
+      </button>
+
+      <nav id="site-nav" class="site-nav" role="navigation" aria-label="Navegación principal">
+        <ul>
+          <li><a href="index.html#inicio" class="nav-link">Inicio</a></li>
+          <li><a href="index.html#quienes-somos" class="nav-link">Quiénes somos</a></li>
+          <li><a href="index.html#contactenos" class="nav-link">Contáctenos</a></li>
+        </ul>
+      </nav>
+
+      <div class="header-spacer" aria-hidden="true"></div>
+    </div>
+  </header>
+
+  <main id="not-found">
+    <!-- Hero 404 -->
+    <section class="hero" aria-labelledby="hero-404-title">
+      <div class="container">
+        <h1 id="hero-404-title">404 — Página no encontrada</h1>
+        <p class="lead">
+          Parece que el enlace está roto o la página fue movida. Te ayudamos a volver al camino correcto.
+        </p>
+        <div class="hero-cta">
+          <a class="btn btn-primary" href="index.html#inicio">Ir al inicio</a>
+          <a class="btn btn-ghost" href="index.html#contactenos">Contactar al equipo</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sugerencias -->
+    <section class="section alt" aria-labelledby="sugerencias-title">
+      <div class="container narrow">
+        <h2 id="sugerencias-title">¿Buscabas alguna de estas secciones?</h2>
+        <ul class="checklist">
+          <li><a href="index.html#web">Desarrollo Web</a></li>
+          <li><a href="index.html#mobile">Desarrollo Mobile</a></li>
+          <li><a href="index.html#frontend">Desarrollo Frontend</a></li>
+          <li><a href="index.html#backend">Desarrollo Backend</a></li>
+          <li><a href="index.html#cicd">CI/CD</a></li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer" role="contentinfo">
+    <div class="container">
+      <p>&copy; <span id="year"></span> WolfMCForge. Todos los derechos reservados.</p>
+    </div>
+  </footer>
+
+  <script src="assets/js/main.js" defer></script>
+</body>
+</html>

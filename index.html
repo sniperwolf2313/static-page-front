@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>WolfMCForge — Desarrollo Web, Mobile, Front/Back y CI/CD</title>
+  <meta name="description" content="Sitio estático para presentar servicios de desarrollo web, móvil, frontend, backend y CI/CD.">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+<body>
+  <a class="skip-link" href="#inicio">Saltar al contenido</a>
+
+  <!-- Header / Menú centrado -->
+  <header class="site-header" role="banner">
+    <div class="header-inner">
+      <div class="brand">
+        <a href="#inicio" class="brand-link" aria-label="Ir al inicio">WolfMCForge</a>
+      </div>
+
+      <button class="nav-toggle" aria-label="Abrir menú" aria-expanded="false" aria-controls="site-nav">
+        <span class="nav-toggle-bar"></span>
+        <span class="nav-toggle-bar"></span>
+        <span class="nav-toggle-bar"></span>
+      </button>
+
+      <nav id="site-nav" class="site-nav" role="navigation" aria-label="Navegación principal">
+        <ul>
+          <li><a href="#inicio" class="nav-link">Inicio</a></li>
+          <li><a href="#quienes-somos" class="nav-link">Quiénes somos</a></li>
+          <li><a href="#contactenos" class="nav-link">Contáctenos</a></li>
+        </ul>
+      </nav>
+
+      <div class="header-spacer" aria-hidden="true"></div>
+    </div>
+  </header>
+
+  <main id="inicio">
+    <!-- Jumbotron / Hero -->
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="container">
+        <h1 id="hero-title">Construimos soluciones que escalan</h1>
+        <p class="lead">
+          Desarrollo web y móvil, front/back y automatización CI/CD para acelerar tus ideas.
+        </p>
+        <div class="hero-cta">
+          <a class="btn btn-primary" href="#contactenos">Contáctanos</a>
+          <a class="btn btn-ghost" href="#quienes-somos">Conócenos</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sección: Desarrollo Web (imagen izquierda, texto derecha) -->
+    <section class="split left-image section" id="web" aria-labelledby="web-title">
+      <div class="container grid-2">
+        <div class="media">
+          <img src="assets/img/web-dev.jpg" alt="Diseño y desarrollo de sitios web" loading="lazy">
+        </div>
+        <div class="content">
+          <h2 id="web-title">Desarrollo Web</h2>
+          <p>
+            Creamos sitios rápidos, accesibles y seguros. Desde <em>landing pages</em> estáticas
+            y SPA hasta integraciones con CMS, enfocándonos en performance, SEO técnico y
+            buenas prácticas de accesibilidad.
+          </p>
+          <ul class="checklist">
+            <li>Arquitecturas modernas (static-first y JAMstack)</li>
+            <li>Mejoras de Core Web Vitals</li>
+            <li>Integración con APIs y servicios en la nube</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sección: Desarrollo Mobile (imagen derecha, texto izquierda) -->
+    <section class="split right-image section alt" id="mobile" aria-labelledby="mobile-title">
+      <div class="container grid-2">
+        <div class="content">
+          <h2 id="mobile-title">Desarrollo Mobile</h2>
+          <p>
+            Aplicaciones nativas y multiplataforma con experiencias fluidas y consistentes.
+            Priorizamos rendimiento, usabilidad y analítica para la toma de decisiones.
+          </p>
+          <ul class="checklist">
+            <li>Publicación en App Store y Google Play</li>
+            <li>Notificaciones, autenticación y pagos</li>
+            <li>Observabilidad y métricas de uso</li>
+          </ul>
+        </div>
+        <div class="media">
+          <img src="assets/img/mobile-dev.png" alt="App móvil en teléfono" loading="lazy">
+        </div>
+      </div>
+    </section>
+
+    <!-- Sección: Frontend (texto + imagen) -->
+    <section class="split left-text section" id="frontend" aria-labelledby="frontend-title">
+      <div class="container grid-2">
+        <div class="content">
+          <h2 id="frontend-title">Desarrollo Frontend</h2>
+          <p>
+            Interfaces elegantes y mantenibles, con componentes reutilizables, accesibles y
+            pruebas de UI. Cuidamos el detalle visual sin sacrificar la calidad técnica.
+          </p>
+          <ul class="checklist">
+            <li>Diseño de sistemas y bibliotecas de componentes</li>
+            <li>SSR/SSG e internacionalización</li>
+            <li>Testing funcional y visual</li>
+          </ul>
+        </div>
+        <div class="media">
+          <img src="assets/img/frontend-dev.webp" alt="Interfaz de usuario en pantalla" loading="lazy">
+        </div>
+      </div>
+    </section>
+
+    <!-- Sección: Backend (imagen + texto) -->
+    <section class="split right-text section alt" id="backend" aria-labelledby="backend-title">
+      <div class="container grid-2">
+        <div class="media">
+          <img src="assets/img/backend-dev.png" alt="Diagrama de arquitectura backend" loading="lazy">
+        </div>
+        <div class="content">
+          <h2 id="backend-title">Desarrollo Backend</h2>
+          <p>
+            APIs robustas y escalables, orientadas a dominios y preparadas para crecer. Observabilidad,
+            seguridad y resiliencia desde el diseño.
+          </p>
+          <ul class="checklist">
+            <li>Microservicios y mensajería</li>
+            <li>Bases de datos SQL/NoSQL</li>
+            <li>Monitoreo, trazas y <em>rate limiting</em></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sección: CI/CD (texto + imagen) -->
+    <section class="split left-text section" id="cicd" aria-labelledby="cicd-title">
+      <div class="container grid-2">
+        <div class="content">
+          <h2 id="cicd-title">CI/CD</h2>
+          <p>
+            Automatizamos pruebas, calidad y despliegues para que entregues valor con rapidez y
+            confianza. Pipelines portables y auditables como código.
+          </p>
+          <ul class="checklist">
+            <li>Integración con Jenkins y GitHub Actions</li>
+            <li>Infraestructura como código (Terraform)</li>
+            <li>Estrategias de despliegue (blue/green, canary)</li>
+          </ul>
+        </div>
+        <div class="media">
+          <img src="assets/img/cicd-dev.webp" alt="Pipeline de integración y despliegue continuo" loading="lazy">
+        </div>
+      </div>
+    </section>
+
+    <!-- Quiénes somos -->
+    <section class="about section alt" id="quienes-somos" aria-labelledby="about-title">
+      <div class="container narrow">
+        <h2 id="about-title">Quiénes somos</h2>
+        <p>
+          Somos un equipo enfocado en entregar software fiable y bien diseñado.
+          Combinamos experiencia técnica con un proceso colaborativo y transparente para
+          convertir requisitos en productos listos para producción.
+        </p>
+      </div>
+    </section>
+
+    <!-- Contáctenos -->
+    <section class="contact section" id="contactenos" aria-labelledby="contact-title">
+      <div class="container narrow">
+        <h2 id="contact-title">Contáctenos</h2>
+        <p>¿Tienes un proyecto en mente? Escríbenos y conversemos.</p>
+
+        <form class="contact-form" action="#" method="post" novalidate>
+          <div class="form-grid">
+            <label>
+              Nombre
+              <input type="text" name="nombre" placeholder="Tu nombre" required>
+            </label>
+            <label>
+              Email
+              <input type="email" name="email" placeholder="tucorreo@ejemplo.com" required>
+            </label>
+          </div>
+          <label>
+            Mensaje
+            <textarea name="mensaje" rows="5" placeholder="Cuéntanos sobre tu idea" required></textarea>
+          </label>
+          <button class="btn btn-primary" type="submit">Enviar</button>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer" role="contentinfo">
+    <div class="container">
+      <p>&copy; <span id="year"></span> WolfMCForge. Todos los derechos reservados.</p>
+    </div>
+  </footer>
+
+  <script src="assets/js/main.js" defer></script>
+</body>
+</html>
