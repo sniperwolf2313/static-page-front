@@ -48,7 +48,6 @@ jobs:
         id: tfout
         run: |
           BUCKET=$(terraform output -raw bucket_name)
-          gh variable set BUCKET_NAME --body "$BUCKET"
           ARN=$(terraform output -raw bucket_arn)
           echo "bucket_name=$BUCKET" >> $GITHUB_OUTPUT
           echo "bucket_arn=$ARN" >> $GITHUB_OUTPUT
