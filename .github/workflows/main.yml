@@ -1,0 +1,91 @@
+name: deploy (static site S3)
+
+on:
+  workflow_dispatch:
+    inputs:
+      bucket:
+        description: "Nombre del bucket S3 destino (ej: demo-ci-cd-website-abc123)"
+        required: false
+  pull_request:
+    branches: [ "main","dev" ]
+    types: [ "closed" ] 
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  AWS_REGION: ${{ secrets.AWS_REGION }}
+  BUCKET_NAME: ${{ vars.BUCKET_NAME }}
+
+jobs:
+  deploy:
+    if: github.event_name == 'workflow_dispatch' || (github.event.pull_request.merged == true)
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure AWS (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Validar bucket
+        id: bucket
+        run: |
+          if [ -n "${{ github.event.inputs.bucket }}" ]; then
+            echo "bucket=${{ github.event.inputs.bucket }}" >> $GITHUB_OUTPUT
+          else
+            echo "bucket=${{ vars.BUCKET_NAME }}" >> $GITHUB_OUTPUT
+          fi
+
+
+      - name: Upload root HTML (no-cache)
+        run: |
+          aws s3 cp . "s3://${{ steps.bucket.outputs.name }}/" --recursive \
+            --exclude "*" \
+            --include "index.html" \
+            --include "404.html" \
+            --include "favicon.ico" \
+            --include "robots.txt" \
+            --include "sitemap.xml" \
+            --include "site.webmanifest" \
+            --include "manifest.webmanifest" \
+            --cache-control "no-cache, no-store, must-revalidate"
+
+      - name: Upload static assets (cache largo)
+        run: |
+          aws s3 cp . "s3://${{ steps.bucket.outputs.name }}/" --recursive \
+            --exclude "*" \
+            --include "assets/**" \
+            --include "css/**" \
+            --include "js/**" \
+            --include "img/**" \
+            --include "images/**" \
+            --include "fonts/**" \
+            --include "static/**" \
+            --include ".well-known/**" \
+            --cache-control "public, max-age=31536000, immutable"
+
+      - name: Sync (delete, deny-list de infra/CI)
+        run: |
+          aws s3 sync . "s3://${{ steps.bucket.outputs.name }}/" --delete \
+            --exclude ".git/*" \
+            --exclude ".github/*" \
+            --exclude "infra/*" \
+            --exclude "*.tf" \
+            --exclude "*.tfstate*" \
+            --exclude ".terraform/*" \
+            --exclude "*.md" \
+            --exclude "LICENSE" \
+            --exclude ".gitignore"
+
+      - name: Verificar archivos en S3
+        run: |
+          aws s3 ls "s3://${{ steps.bucket.outputs.name }}/" --recursive --human-readable --summarize
+
+      - name: Mostrar URL (best effort)
+        run: |
+          echo "http://${{ steps.bucket.outputs.name }}.s3-website-${{ env.AWS_REGION }}.amazonaws.com"
