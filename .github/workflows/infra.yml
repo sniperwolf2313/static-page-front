@@ -1,0 +1,99 @@
+name: Creacion infra, deploy - servicios
+
+on:
+  workflow_dispatch:
+    inputs:
+      project:
+        description: "Nombre del bucket"
+        required: true
+        default: "demo-ci-cd"
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: infra
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hashicorp/setup-terraform@v3
+
+      - name: Configure AWS (OIDC)
+        id: creds
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      # Pasamos variables a Terraform
+      - name: Set TF_VAR environment
+        run: |
+          echo "TF_VAR_project=${{ github.event.inputs.project }}" >> $GITHUB_ENV
+          echo "TF_VAR_aws_region=${{ secrets.AWS_REGION }}" >> $GITHUB_ENV
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Plan
+        run: terraform plan
+
+      - name: Terraform Apply
+        run: terraform apply -auto-approve
+
+      - name: Export outputs
+        id: tfout
+        run: |
+          BUCKET=$(terraform output -raw bucket_name)
+          gh variables set BUCKET_NAME --body "$BUCKET"
+          ARN=$(terraform output -raw bucket_arn)
+          echo "bucket_name=$BUCKET" >> $GITHUB_OUTPUT
+          echo "bucket_arn=$ARN" >> $GITHUB_OUTPUT
+
+      # ─────────────────────────────────────────────────────────────
+      # 1) STATIC WEBSITE HOSTING (index y 404)
+      # ─────────────────────────────────────────────────────────────
+      - name: Enable S3 Static Website hosting
+        run: |
+          BUCKET="${{ steps.tfout.outputs.bucket_name }}"
+          aws s3api put-bucket-website --bucket "$BUCKET" --website-configuration '{
+            "IndexDocument": {"Suffix": "index.html"},
+            "ErrorDocument": {"Key": "404.html"}
+          }'
+
+      # ─────────────────────────────────────────────────────────────
+      # 2) PUBLIC ACCESS BLOCK (a nivel BUCKET)
+      #    ACLs siguen bloqueadas; policies públicas PERMITIDAS
+      # ─────────────────────────────────────────────────────────────
+        # Si tu CUENTA tiene bloqueadas las public policies, esto NO basta.
+        # Revisa S3 → Account settings si la policy del paso 3 falla.
+      - name: Allow public policies on this bucket (keep ACLs blocked)
+        run: |
+          BUCKET="${{ steps.tfout.outputs.bucket_name }}"
+          aws s3api put-public-access-block --bucket "$BUCKET" \
+            --public-access-block-configuration \
+            BlockPublicAcls=true,IgnorePublicAcls=true,BlockPublicPolicy=false,RestrictPublicBuckets=false
+
+      # ─────────────────────────────────────────────────────────────
+      # 3) BUCKET POLICY (lectura pública de OBJETOS)
+      # ─────────────────────────────────────────────────────────────
+      - name: Attach public-read bucket policy
+        run: |
+          BUCKET="${{ steps.tfout.outputs.bucket_name }}"
+          cat > policy.json <<'JSON'
+          {
+            "Version": "2012-10-17",
+            "Statement": [{
+              "Sid": "PublicReadForWebsite",
+              "Effect": "Allow",
+              "Principal": "*",
+              "Action": ["s3:GetObject"],
+              "Resource": "arn:aws:s3:::__BUCKET__/*"
+            }]
+          }
+          JSON
+          sed -i "s/__BUCKET__/$BUCKET/g" policy.json
+          aws s3api put-bucket-policy --bucket "$BUCKET" --policy file://policy.json
