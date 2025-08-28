@@ -37,8 +37,6 @@ jobs:
         run: |
           if [ -n "${{ github.event.inputs.bucket }}" ]; then
             echo "bucket=${{ github.event.inputs.bucket }}" >> $GITHUB_OUTPUT
-          else
-            echo "bucket=${{ vars.BUCKET_NAME }}" >> $GITHUB_OUTPUT
           fi
 
 
